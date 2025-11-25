@@ -1,7 +1,7 @@
 /*
  * Tiny Tapeout RISC-V SoC (CTW Edition)
  * Top Level Module: Integrates CPU, SPI XIP, RAM, and UART
- * UPDATE: Reduced RAM to 64 Bytes to fit in 2x2 Tiles
+ * UPDATE: Extreme Diet - RAM reduced to 32 Bytes (8 Words) to fit in 2x2
  */
 
 `default_nettype none
@@ -63,15 +63,15 @@ module tt_um_ctw_riscv_soc (
         .d_addr(cpu_d_addr), .d_wdata(cpu_d_wdata), .d_wen(cpu_d_wen), .d_rdata(cpu_d_rdata)
     );
 
-    // --- INTERNAL RAM (REDUCED to 64 Bytes = 16 Words) ---
-    // Address range: 0x2000_0000 to 0x2000_003F
-    reg [31:0] ram [0:15]; // Reduced size
+    // --- INTERNAL RAM (DIET MODE: 32 Bytes = 8 Words) ---
+    // Address range: 0x2000_0000 to 0x2000_001F
+    reg [31:0] ram [0:7]; // Only 8 words
     
     // RAM Write Logic
     always @(posedge clk) begin
         if (cpu_d_wen && cpu_d_addr[29] && !cpu_d_addr[30]) begin
-            // Use addr[5:2] for 16 words index
-            ram[cpu_d_addr[5:2]] <= cpu_d_wdata;
+            // Use addr[4:2] to index 8 words (0..7)
+            ram[cpu_d_addr[4:2]] <= cpu_d_wdata;
         end
     end
 
@@ -93,7 +93,7 @@ module tt_um_ctw_riscv_soc (
         cpu_d_rdata = 0;
         // Internal RAM Read
         if (cpu_d_addr[29]) begin
-            cpu_d_rdata = ram[cpu_d_addr[5:2]];
+            cpu_d_rdata = ram[cpu_d_addr[4:2]];
         end
         // Peripheral Read
         else if (cpu_d_addr[30]) begin
