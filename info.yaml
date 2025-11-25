@@ -1,14 +1,15 @@
 # Tiny Tapeout project information
+yaml_version: 6
+
 project:
   title:        "CTW RISC-V SoC (Minimalist)"
-  author:       "CTW User"
+  author:       "Tran Tan Tai"
   discord:      ""
   description:  "A minimal RISC-V RV32E SoC with internal RAM and XIP from SPI Flash."
   language:     "Verilog"
   clock_hz:     50000000
 
-  # How many tiles your design occupies? A single tile is about 164x137 microns.
-  # We use 1x2 (Width x Height) to ensure enough space for RAM.
+  # How many tiles your design occupies? 
   tiles: "1x2" 
 
   # Your top module name must match the Verilog file exactly
@@ -21,7 +22,6 @@ project:
     - "spi_xip.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT CHANGE THE ORDER.
-# These match the assigning in tt_um_ctw_riscv_soc.v
 pinout:
   # Inputs (ui_in)
   ui[0]: "SPI MISO (Flash Data In)"
@@ -43,7 +43,7 @@ pinout:
   uo[6]: "GPIO Out 2 (LED 2)"
   uo[7]: "GPIO Out 3 (LED 3)"
 
-  # Bidirectional (uio) - Not used in this design
+  # Bidirectional (uio)
   uio[0]: ""
   uio[1]: ""
   uio[2]: ""
@@ -55,14 +55,12 @@ pinout:
 
 # Docs formatting
 documentation: 
-  author:       "CTW User"
+  author:       "Tran Tan Tai"
   title:        "CTW RISC-V SoC"
   language:     "Verilog"
   description:  "Experimental RISC-V SoC running entirely from SPI Flash (XIP)."
 
-# Verification settings (Used by GitHub Actions)
+# Verification settings
 test:
   openlane:
-    # Use the specific configuration for multi-tile if needed, 
-    # but standard flow usually handles 1x2 automatically based on 'tiles' key above.
     pass: true
