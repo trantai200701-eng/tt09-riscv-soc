@@ -1,48 +1,49 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
-  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
+  title:        "CTW RISC-V SoC (Minimalist)"
+  author:       "CTW User"
+  discord:      ""
+  description:  "A minimal RISC-V RV32E SoC with internal RAM and XIP from SPI Flash."
+  language:     "Verilog"
+  clock_hz:     50000000
 
-  # How many tiles your design occupies? A single tile is about 167x108 uM.
-  tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
+  # How many tiles your design occupies? A single tile is about 164x137 microns.
+  # We use 1x2 (Width x Height) to ensure enough space for RAM.
+  tiles: "1x2" 
 
-  # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_example"
+  # Your top module name must match the Verilog file exactly
+  top_module:  "tt_um_ctw_riscv_soc"
 
-  # List your project's source files here.
-  # Source files must be in ./src and you must list each source file separately, one per line.
-  # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
+  # Source files (under the src directory)
   source_files:
-    - "project.v"
+    - "tt_um_ctw_riscv_soc.v"
+    - "simple_cpu.v"
+    - "spi_xip.v"
 
-# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
-# This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
+# The pinout of your project. Leave unused pins blank. DO NOT CHANGE THE ORDER.
+# These match the assigning in tt_um_ctw_riscv_soc.v
 pinout:
-  # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  # Inputs (ui_in)
+  ui[0]: "SPI MISO (Flash Data In)"
+  ui[1]: "GPIO In 1"
+  ui[2]: "GPIO In 2"
+  ui[3]: "GPIO In 3"
+  ui[4]: "GPIO In 4"
+  ui[5]: "GPIO In 5"
+  ui[6]: "GPIO In 6"
+  ui[7]: "GPIO In 7"
 
-  # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  # Outputs (uo_out)
+  uo[0]: "SPI MOSI (Flash Cmd)"
+  uo[1]: "SPI CS_n (Flash Select)"
+  uo[2]: "SPI SCK (Flash Clock)"
+  uo[3]: "UART TX (Debug Output)"
+  uo[4]: "GPIO Out 0 (LED 0)"
+  uo[5]: "GPIO Out 1 (LED 1)"
+  uo[6]: "GPIO Out 2 (LED 2)"
+  uo[7]: "GPIO Out 3 (LED 3)"
 
-  # Bidirectional pins
+  # Bidirectional (uio) - Not used in this design
   uio[0]: ""
   uio[1]: ""
   uio[2]: ""
@@ -52,5 +53,16 @@ pinout:
   uio[6]: ""
   uio[7]: ""
 
-# Do not change!
-yaml_version: 6
+# Docs formatting
+documentation: 
+  author:       "CTW User"
+  title:        "CTW RISC-V SoC"
+  language:     "Verilog"
+  description:  "Experimental RISC-V SoC running entirely from SPI Flash (XIP)."
+
+# Verification settings (Used by GitHub Actions)
+test:
+  openlane:
+    # Use the specific configuration for multi-tile if needed, 
+    # but standard flow usually handles 1x2 automatically based on 'tiles' key above.
+    pass: true
