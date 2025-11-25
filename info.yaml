@@ -10,7 +10,7 @@ project:
   clock_hz:     50000000
 
   # How many tiles your design occupies? 
-  tiles: "1x2" 
+  tiles: "2x2" 
 
   # Your top module name must match the Verilog file exactly
   top_module:  "tt_um_ctw_riscv_soc"
